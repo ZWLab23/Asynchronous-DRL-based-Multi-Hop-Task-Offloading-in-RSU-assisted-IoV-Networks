@@ -1,0 +1,15 @@
+------------------ start ------------------
+algo_name : A3C
+env_name : Multihop-V2V
+n_train_processes : 6
+max_train_ep : 300
+max_test_ep : 500
+update_interval : 5
+gamma : 0.98
+learning_rate : 0.0002
+hidden_dim : 256
+device : cuda
+result_path : D:\PyCharm\PyCharmProject\pytorch\Multihop-V2V-no-script\methods\A3C/outputs/Multihop-V2V/20231115-085643/results/
+model_path : D:\PyCharm\PyCharmProject\pytorch\Multihop-V2V-no-script\methods\A3C/outputs/Multihop-V2V/20231115-085643/models/
+save_fig : True
+------------------- end -------------------
