@@ -1,6 +1,6 @@
 # Asynchronous-DRL-based-Multi-Hop-Task-Offloading-in-RSU-assisted-IoV-Networks
 #This is the runnable Python project for the paper 'Asynchronous-DRL-based-Multi-Hop-Task-Offloading-in-RSU-assisted-IoV-Networks'.
-Components 
+
 './env/config' contains parameter configurations.
 
 './env/datastruct' contains the data struct of the project.
