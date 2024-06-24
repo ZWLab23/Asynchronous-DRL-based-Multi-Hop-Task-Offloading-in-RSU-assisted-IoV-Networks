@@ -295,42 +295,44 @@ class RoadState(gym.Env):
                             communication_time = self.r2v_connect_time(pos2, pos1, pos1_speed)
                             G.add_edge(node1, node2, weight=communication_time)
 
-        # 检查指定的车是否与RSU通信，如果不通信则返回False
-        if Vehicle_id not in G.neighbors(0):
+            # 检查指定的车是否与RSU通信，如果不通信则返回False
+            # if Vehicle_id not in G.neighbors(0):
+            #     return False
+        if nx.has_path(G, Vehicle_id, 0):
+
+            def dfs_paths(graph, start, end, path=[]):
+                path = path + [start]
+                if start == end:
+                    return [path]
+                paths = []
+                for node in graph.neighbors(start):
+                    if node not in path:
+                        new_paths = dfs_paths(graph, node, end, path)
+                        for new_path in new_paths:
+                            paths.append(new_path)
+                return paths
+
+            rsu_id = 0
+            vehicle_id = Vehicle_id  # 你要查询的车辆编号
+            paths = dfs_paths(G, vehicle_id, rsu_id)
+
+            # 输出路径及路径中边的权值（通信时间）
+            result_paths = []
+            result_weights = []
+            for path in paths:
+                weighted_path = [(node, G[path[i]][path[i + 1]]['weight']) for i, node in enumerate(path[:-1])]
+                nodes, weights = zip(*weighted_path)
+                result_paths.append(list(nodes) + [path[-1]])
+                min_weight = min(weights)  # 找到路径中的最小权值
+                result_weights.append(min_weight)
+
+            # 找到最大权值的路径
+            max_weight_index = result_weights.index(max(result_weights))
+            optimal_path = result_paths[max_weight_index]
+            optimal_weight = result_weights[max_weight_index]
+            return optimal_path, optimal_weight
+        else:
             return False
-
-        def dfs_paths(graph, start, end, path=[]):
-            path = path + [start]
-            if start == end:
-                return [path]
-            paths = []
-            for node in graph.neighbors(start):
-                if node not in path:
-                    new_paths = dfs_paths(graph, node, end, path)
-                    for new_path in new_paths:
-                        paths.append(new_path)
-            return paths
-
-        rsu_id = 0
-        vehicle_id = Vehicle_id  # 你要查询的车辆编号
-        paths = dfs_paths(G, vehicle_id, rsu_id)
-
-        # 输出路径及路径中边的权值（通信时间）
-        result_paths = []
-        result_weights = []
-        for path in paths:
-            weighted_path = [(node, G[path[i]][path[i + 1]]['weight']) for i, node in enumerate(path[:-1])]
-            nodes, weights = zip(*weighted_path)
-            result_paths.append(list(nodes) + [path[-1]])
-            min_weight = min(weights)  # 找到路径中的最小权值
-            result_weights.append(min_weight)
-
-        # 找到最大权值的路径
-        max_weight_index = result_weights.index(max(result_weights))
-        optimal_path = result_paths[max_weight_index]
-        optimal_weight = result_weights[max_weight_index]
-
-        return optimal_path, optimal_weight
 
     # # 定义映射函数，将 (x, y, z) 映射为整数
     # def composite_action(x, y, z):

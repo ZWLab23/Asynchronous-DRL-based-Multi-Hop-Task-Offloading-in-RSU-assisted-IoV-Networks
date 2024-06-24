@@ -4,7 +4,6 @@ import torch.nn.functional as F
 from torch.distributions import Categorical
 import torch
 import os
-bianx
 class ActorCritic(nn.Module):
     def __init__(self,input_dim, output_dim, hidden_dim):
         super(ActorCritic, self).__init__()
